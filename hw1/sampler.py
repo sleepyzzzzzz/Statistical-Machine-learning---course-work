@@ -1,11 +1,11 @@
-import numpy
+import numpy as np
 
 class ProbabilityModel:
 
     # Returns a single sample (independent of values returned on previous calls).
     # The returned value is an element of the model's sample space.
-    def sample(self):
-        pass
+    def sample(self, size=[]):
+        return np.random.uniform(size=size)
 
 
 # The sample space of this probability model is the set of real numbers, and
@@ -16,10 +16,16 @@ class UnivariateNormal(ProbabilityModel):
     # Initializes a univariate normal probability model object
     # parameterized by mu and (a positive) sigma
     def __init__(self,mu,sigma):
-        pass
+        self.mu = mu
+        self.sigma = sigma
 
     def sample(self):
-        pass
+        model = ProbabilityModel()
+        u1 = model.sample()
+        u2 = model.sample()
+        x = self.mu + np.sqrt(-2 * np.log(u1)) * np.cos(2 * np.pi * u2) * self.sigma
+        return x
+
     
 # The sample space of this probability model is the set of D dimensional real
 # column vectors (modeled as numpy.array of size D x 1), and the probability 
@@ -35,7 +41,8 @@ class MultiVariateNormal(ProbabilityModel):
         self.Sigma = Sigma
 
     def sample(self):
-        pass
+        X = []
+        
     
 
 # The sample space of this probability model is the finite discrete set {0..k-1}, and 
@@ -47,7 +54,7 @@ class Categorical(ProbabilityModel):
     # probability model object with distribution parameterized by the atomic probabilities vector
     # ap (numpy.array of size k).
     def __init__(self,ap):
-        pass
+        self.ap = ap
 
     def sample(self):
         pass
@@ -63,7 +70,8 @@ class MixtureModel(ProbabilityModel):
     # atomic probabilities vector ap (numpy.array of size k) and by the tuple of 
     # probability models pm
     def __init__(self,ap,pm):
-        pass
+        self.ap = ap
+        self.pm = pm
 
     def sample(self):
         pass
