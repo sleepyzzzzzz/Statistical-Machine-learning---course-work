@@ -5,7 +5,7 @@ class ProbabilityModel:
     # Returns a single sample (independent of values returned on previous calls).
     # The returned value is an element of the model's sample space.
     def sample(self, size=[]):
-        return np.random.uniform(size=size)
+        pass
 
 
 # The sample space of this probability model is the set of real numbers, and
