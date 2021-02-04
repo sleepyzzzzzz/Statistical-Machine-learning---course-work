@@ -48,8 +48,8 @@ class MultiVariateNormal(ProbabilityModel):
         self.Sigma = Sigma
 
     def sample(self):
-        X = []
         L = np.linalg.cholesky(self.Sigma)
+        X = []
         for i in range(self.Mu.size):
             X.append(UnivariateNormal(0, 1).sample())
         X = np.array(X)
@@ -118,5 +118,5 @@ if __name__ == '__main__':
     U.plot_his()
     C = Categorical(np.array([0.1, 0.1, 0.3, 0.3, 0.2]))
     C.plot_his()
-    M = MultiVariateNormal(np.array([1, 1]), np.diag([1, 0.5]))
+    M = MultiVariateNormal(np.array([1, 1]), np.array([[1., 0.5], [0.5, 1.]]))
     M.plot_his()
