@@ -49,7 +49,22 @@ class MultiVariateNormal(ProbabilityModel):
 
     def sample(self):
         X = []
-        
+        L = np.linalg.cholesky(self.Sigma)
+        for i in range(self.Mu.size):
+            X.append(UnivariateNormal(0, 1).sample())
+        X = np.array(X)
+        S = self.Mu + np.dot(L, X)
+        return S
+
+    def plot_his(self):
+        x = []
+        y = []
+        for i in range(5000):
+            z = self.sample()
+            x.append(z[0])
+            y.append(z[1])
+        plt.scatter(x, y)
+        plt.show()
     
 
 # The sample space of this probability model is the finite discrete set {0..k-1}, and 
@@ -92,10 +107,16 @@ class MixtureModel(ProbabilityModel):
         self.pm = pm
 
     def sample(self):
-        pass
+        cum = np.cumsum(self.ap)
+        u = ProbabilityModel().sample()
+        for i in range(len(self.ap)):
+            if u < cum[i]:
+                return self.pm[i].sample()
 
 if __name__ == '__main__':
     U = UnivariateNormal(0, 1)
     U.plot_his()
     C = Categorical(np.array([0.1, 0.1, 0.3, 0.3, 0.2]))
     C.plot_his()
+    M = MultiVariateNormal(np.array([1, 1]), np.diag([1, 0.5]))
+    M.plot_his()
