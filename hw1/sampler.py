@@ -57,12 +57,11 @@ class MultiVariateNormal(ProbabilityModel):
 
     def sample(self):
         L = np.linalg.cholesky(self.Sigma)
-        X = []
+        u = []
         for i in range(self.Mu.size):
-            X.append(UnivariateNormal(0, 1).sample())
-        X = np.array(X)
-        S = self.Mu + np.dot(L, X)
-        return S
+            u.append(UnivariateNormal(0, 1).sample())
+        z = self.Mu + np.dot(L, u)
+        return z
 
     def plot_his(self):
         x = []
