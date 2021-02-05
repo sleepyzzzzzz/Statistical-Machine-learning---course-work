@@ -26,6 +26,13 @@ class UnivariateNormal(ProbabilityModel):
         z = self.mu + np.sqrt(-2 * np.log(u1)) * np.cos(2 * np.pi * u2) * self.sigma
         return z
 
+    def plot_his(self):
+        z = []
+        for i in range(5000):
+            z.append(self.sample())
+        plt.hist(z)
+        plt.show()
+
     
 # The sample space of this probability model is the set of D dimensional real
 # column vectors (modeled as numpy.array of size D x 1), and the probability 
@@ -48,6 +55,16 @@ class MultiVariateNormal(ProbabilityModel):
         X = np.array(X)
         S = self.Mu + np.dot(L, X)
         return S
+
+    def plot_his(self):
+        x = []
+        y = []
+        for i in range(5000):
+            z = self.sample()
+            x.append(z[0])
+            y.append(z[1])
+        plt.scatter(x, y)
+        plt.show()
     
 
 # The sample space of this probability model is the finite discrete set {0..k-1}, and 
@@ -68,6 +85,13 @@ class Categorical(ProbabilityModel):
             if u < cum[i]:
                 return i
 
+    def plot_his(self):
+        z = []
+        for i in range(5000):
+            z.append(self.sample())
+        plt.hist(z)
+        plt.show()
+
 
 # The sample space of this probability model is the union of the sample spaces of 
 # the underlying probability models, and the probability measure is defined by 
@@ -83,4 +107,13 @@ class MixtureModel(ProbabilityModel):
         self.pm = pm
 
     def sample(self):
+        pass
         
+
+if __name__ == '__main__':
+    U = UnivariateNormal(1, 1)
+    U.plot_his()
+    C = Categorical(np.array([0.1, 0.1, 0.3, 0.3, 0.2]))
+    C.plot_his()
+    M = MultiVariateNormal(np.array([1, 1]), np.array([[1., 0.5], [0.5, 1.]]))
+    M.plot_his()
