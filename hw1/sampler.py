@@ -6,7 +6,7 @@ class ProbabilityModel:
     # Returns a single sample (independent of values returned on previous calls).
     # The returned value is an element of the model's sample space.
     def sample(self):
-        return np.random.uniform(0, 1)
+        pass
 
 
 # The sample space of this probability model is the set of real numbers, and
@@ -21,8 +21,8 @@ class UnivariateNormal(ProbabilityModel):
         self.sigma = sigma
 
     def sample(self):
-        u1 = ProbabilityModel().sample()
-        u2 = ProbabilityModel().sample()
+        u1 = np.random.uniform(0, 1)
+        u2 = np.random.uniform(0, 1)
         z = self.mu + np.sqrt(-2 * np.log(u1)) * np.cos(2 * np.pi * u2) * self.sigma
         return z
 
@@ -63,7 +63,7 @@ class Categorical(ProbabilityModel):
 
     def sample(self):
         cum = np.cumsum(self.ap)
-        u = ProbabilityModel().sample()
+        u = np.random.uniform(0, 1)
         for i in range(len(self.ap)):
             if u < cum[i]:
                 return i
@@ -83,8 +83,4 @@ class MixtureModel(ProbabilityModel):
         self.pm = pm
 
     def sample(self):
-        cum = np.cumsum(self.ap)
-        u = ProbabilityModel().sample()
-        for i in range(len(self.ap)):
-            if u < cum[i]:
-                return self.pm[i].sample()
+        
