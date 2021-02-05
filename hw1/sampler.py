@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Feb  5 12:34:29 2021
+
+@author: xiongn
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -107,7 +115,19 @@ class MixtureModel(ProbabilityModel):
         self.pm = pm
 
     def sample(self):
-        pass
+        rand = np.random.uniform(0, 1);
+        pts = self.pm[int(rand*len(self.ap))].sample();
+        return pts;
+    
+    def plot(self):
+        x = []
+        y = []
+        for i in range(5000):
+            z = self.sample()
+            x.append(z[0])
+            y.append(z[1])
+        plt.scatter(x, y)
+        plt.show()        
         
 
 if __name__ == '__main__':
@@ -117,3 +137,12 @@ if __name__ == '__main__':
     C.plot_his()
     M = MultiVariateNormal(np.array([1, 1]), np.array([[1., 0.5], [0.5, 1.]]))
     M.plot_his()
+    cov = np.array([[1., 0], [0, 1.]])
+    pm = [MultiVariateNormal(np.array([1, 1]), cov),MultiVariateNormal(np.array([-1, 1]), cov),MultiVariateNormal(np.array([1, -1]), cov),
+          MultiVariateNormal(np.array([-1, -1]), cov)]
+    pm=tuple(pm)
+    Mix = MixtureModel(np.array([.25, .25, .25, .25]), pm)
+    Mix.plot()
+    
+    
+    
