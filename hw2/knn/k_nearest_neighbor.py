@@ -72,7 +72,7 @@ class KNearestNeighbor(object):
         # not use a loop over dimension. 1 line of code expected            #
         #####################################################################
 
-        pass
+        dists[i, j] = np.linalg.norm(self.X_train[j] - X[i])
         #####################################################################
         #                       END OF YOUR CODE                            #
         #####################################################################
@@ -95,7 +95,7 @@ class KNearestNeighbor(object):
       # points, and store the result in dists[i, :].                        #
       #######################################################################
 
-      pass
+      dists[i, :] = np.linalg.norm(self.X_train - X[i], axis=1)
       #######################################################################
       #                         END OF YOUR CODE                            #
       #######################################################################
@@ -126,7 +126,10 @@ class KNearestNeighbor(object):
     ##########################################################################
 
 
-    pass
+    sq_X_test = np.sum(np.square(X), axis=1).reshape(-1, 1)
+    sq_X_train = np.sum(np.square(self.X_train), axis=1)
+    mul = np.dot(X, self.X_train.T)
+    dists = np.sqrt(sq_X_train + sq_X_test - 2 * mul)
     #########################################################################
     #                         END OF YOUR CODE                              #
     #########################################################################
@@ -151,7 +154,7 @@ class KNearestNeighbor(object):
       # A list of length k storing the labels of the k nearest neighbors to
       # the ith test point.
         
-        closest_y = []
+      closest_y = []
       #########################################################################
       # TODO:                                                                 #
       # Use the distance matrix to find the k nearest neighbors of the ith    #
@@ -159,7 +162,7 @@ class KNearestNeighbor(object):
       # neighbors. Store these labels in closest_y.                           #
       # Hint: Look up the function numpy.argsort.                             #
       #########################################################################
-
+      closest_y = self.y_train[np.argsort(dists[i])[:k]]
 
       #########################################################################
       # TODO:                                                                 #
@@ -168,7 +171,7 @@ class KNearestNeighbor(object):
       # Store this label in y_pred[i]. Break ties by choosing the smaller     #
       # label.                                                                #
       #########################################################################
-
+      y_pred[i] = np.argmax(np.bincount(closest_y))
       
       #########################################################################
       #                           END OF YOUR CODE                            #
