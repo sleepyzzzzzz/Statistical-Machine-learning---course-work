@@ -71,8 +71,8 @@ class LogisticRegressor:
         # Compute the loss function for unregularized logistic regression        #
         # TODO: 1-2 lines of code expected                                       #
         ##########################################################################
-                
-
+        htheta = utils.sigmoid(np.dot(X,theta))
+        J = np.sum((-y) * np.log(htheta) - (1-y) * np.log(1-htheta))/m    
 
         ###########################################################################
         #                           END OF YOUR CODE                              #
@@ -100,7 +100,7 @@ class LogisticRegressor:
         # TODO: 1 line of code expected                                          #
         ##########################################################################
        
-
+        grad = np.sum(X * (utils.sigmoid(np.dot(X,theta))-y)[:,None],axis=0)/m
 
         ###########################################################################
         #                           END OF YOUR CODE                              #
@@ -126,7 +126,7 @@ class LogisticRegressor:
         # Compute the predicted outputs for X                                     #
         # TODO: 1 line of code expected                                           #
         ###########################################################################
-         
+        y_pred = (np.dot(X, self.theta)>0).astype(int)
 
 
         ###########################################################################
@@ -212,8 +212,10 @@ class RegLogisticRegressor:
         # Compute the loss function for regularized logistic regression          #
         # TODO: 1-2 lines of code expected                                       #
         ##########################################################################
-
-
+        htheta = utils.sigmoid(np.dot(X,theta))
+        J = np.sum((-y) * np.log(htheta) - (1-y) * np.log(1-htheta))/m + (np.sum(np.square(theta[1:len(theta)]))) * reg/2/m
+        if (J == float("inf")):
+            J = float("nan")
         ###########################################################################
         #                           END OF YOUR CODE                              #
         ###########################################################################
@@ -241,6 +243,8 @@ class RegLogisticRegressor:
         # regression                                                             #
         # TODO: 2 lines of code expected                                          #
         ##########################################################################
+        grad = np.sum(X * (utils.sigmoid(np.dot(X,theta))-y)[:,None],axis=0)/m + theta * reg/m
+        grad[0] = grad[0] - theta[0] * reg/m
 
 
         ###########################################################################
@@ -268,7 +272,7 @@ class RegLogisticRegressor:
         # TODO: 1 line of code expected                                           #
         #                                                                         #
         ###########################################################################
-
+        y_pred = (np.dot(X, self.theta)>0).astype(int)
 
         ###########################################################################
         #                           END OF YOUR CODE                              #

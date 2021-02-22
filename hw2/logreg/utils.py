@@ -16,9 +16,9 @@ from sklearn.model_selection import KFold
 
 def sigmoid (z):
   
-    sig = np.zeros(z.shape)
+    #sig = np.zeros(z.shape)
     # Your code here
-    
+    sig = 1 / (1 + np.exp(-z))
     # End your code
 
     return sig
@@ -33,7 +33,7 @@ def sigmoid (z):
 def log_features(X):
     logf = np.zeros(X.shape)
     # Your code here
-    
+    logf = np.log(X+1)
     
     # End your code
     return logf
@@ -45,7 +45,7 @@ def log_features(X):
 ######################################################################################
 
 def std_features(X):
-    mu = np.np.mean(X,axis=0)
+    mu = np.mean(X,axis=0)
     sigma = np.std(X,axis=0)
     X_norm = (X - mu) / sigma
     return X_norm, mu, sigma
@@ -60,11 +60,8 @@ def std_features(X):
 def bin_features(X):
     tX = np.zeros(X.shape)
     # your code here
+    tX = (X > 0).astype(int)
     
-
-             
-    
-
     # end your code
     return tX
 
@@ -95,13 +92,51 @@ def bin_features(X):
 #
 def select_lambda_crossval(X,y,lambda_low,lambda_high,lambda_step,penalty):
 
+#     best_lambda = lambda_low
+#     # Your code here
+#     # Implement the algorithm above.
+#     lambda_array = np.arange(lambda_low, lambda_high, lambda_step)
+#     kf = model_selection.KFold(10)
+#     highest_acc = 0;
+#     lambda_ind = 0
+#     for i in lambda_array:
+#         lr = linear_model.LogisticRegression(penalty = penalty)
+#         acc_array = np.zeros(10)
+#         ind = 0;
+#         for train, test in model_select.split(X):
+#             X_train, y_train = X[train], y[train]
+#             X_test, y_test = X[test], y[test]
+#             lr.fit(X_train, y_train)
+#             pred = lr.predict(X_test)
+#             accuracy = float(np.sum(y_test == pred)) / y_test.shape[0]
+#             acc_array[ind] = accuracy
+#             ind+=1
+#     # end your code
+#         if(np.mean(acc_array)>highest_acc):
+#             best_lambda = lambda_array[lambda_ind]
+#         lambda_ind += 1;    
     best_lambda = lambda_low
+
     # Your code here
     # Implement the algorithm above.
-    
+    lambdas = np.arange(lambda_low, lambda_high, lambda_step)
+    accuracies = np.empty([10, lambdas.shape[0]], dtype=float)
 
-    # end your code
-
+    kfolds = model_selection.KFold(n_splits=10)
+    val_idx = 0
+    for (train, test) in kfolds.split(X):
+        X_train, X_test, y_train, y_test = X[train], X[test], y[train], y[test]
+        clf = linear_model.LogisticRegression(C=1.0, penalty=penalty, tol=1e-6)
+        reg_idx = 0
+        for reg in lambdas:
+            clf.set_params(C=1.0/reg)
+            clf.fit(X_train, y_train)
+            predy = clf.predict(X_test)
+            num_correct = np.sum(y_test == predy)
+            accuracies[val_idx, reg_idx] = float(num_correct) / y_test.shape[0]
+            reg_idx += 1
+        val_idx += 1
+    best_lambda = lambdas[np.argmax(np.mean(accuracies, axis=0))]            
     return best_lambda
 
 

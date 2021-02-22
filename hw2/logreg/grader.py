@@ -132,6 +132,7 @@ if __name__ == "__main__":
         theta_opt = reg_lr1.train(XX,y,reg=reg,num_iters=1000,norm=False)
         reg_lr1.theta = theta_opt
         predy = reg_lr1.predict(XX)
+
         accuracy = np.sum(predy==y)/y.size
         grader.requireIsGreaterThan(0.59, accuracy)
 
