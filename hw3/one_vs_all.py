@@ -62,7 +62,7 @@ class one_vs_allLogisticRegressor:
         # Compute the predicted outputs for X                                     #
         # TODO: 1-2 lines of code expected                                        #
         ###########################################################################
-        prob = 1 / np.exp(-np.dot(X, self.theta))
+        prob = 1 / (1 + np.exp(-np.dot(X, self.theta)))
         y_pred = np.argmax(prob, axis=1)
         ###########################################################################
         #                           END OF YOUR CODE                              #
