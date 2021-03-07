@@ -37,13 +37,13 @@ def softmax_loss_naive(theta, X, y, reg):
     for i in range(m):
         for j in range(len(theta[0])):
             if(y[i] == j):
-                l = -1/m * np.log(P[i,j]);
+                l = np.log(P[i,j]);
                 J += l
-                
+    J = -J/m;
     for i in range(dim):
         for j in range(len(theta[0])):
             J += reg / 2 / m * np.square(theta[i,j]);
-            
+       
     for i in range(len(theta[0])):
         for j in range(m):
             if (y[j] == i):
@@ -51,9 +51,11 @@ def softmax_loss_naive(theta, X, y, reg):
             else:
                 I = 0;
                     
-            grad[:, i] += -1/m * (X[j,:] * (I - P[j,i])) 
+            grad[:, i] += (X[j,:] * (I - P[j,i])) 
+        grad[:,i] = -grad[:,i]/m
         grad[:,i] += reg/m * theta[:,i]
-
+    
+    
 
     #############################################################################
     #                          END OF YOUR CODE                                 #
