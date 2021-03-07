@@ -37,76 +37,43 @@ class LinearClassifier:
             X_batch = np.zeros((batch_size,dim))
             y_batch = np.zeros((batch_size,))
 
-#           #########################################################################
-#           # TODO:                                                                 #
-#           # Sample batch_size elements from the training data and their           #
-#           # corresponding labels to use in this round of gradient descent.        #
-#           # Store the data in X_batch and their corresponding labels in           #
-#           # y_batch; after sampling X_batch should have shape (batch_size, dim)   #
-#           # and y_batch should have shape (batch_size,)                           #
-#           #                                                                       #
-#           # Hint: Use np.random.choice to generate indices. Sampling with         #
-#           # replacement is faster than sampling without replacement.              #
-#           # About 3 lines of code expected                                        #
-#           #########################################################################
-#             ind = np.random.choice(num_train, batch_size)
-#             X_batch = X[ind,:]
-#             y_batch = y[ind]
+          #########################################################################
+          # TODO:                                                                 #
+          # Sample batch_size elements from the training data and their           #
+          # corresponding labels to use in this round of gradient descent.        #
+          # Store the data in X_batch and their corresponding labels in           #
+          # y_batch; after sampling X_batch should have shape (batch_size, dim)   #
+          # and y_batch should have shape (batch_size,)                           #
+          #                                                                       #
+          # Hint: Use np.random.choice to generate indices. Sampling with         #
+          # replacement is faster than sampling without replacement.              #
+          # About 3 lines of code expected                                        #
+          #########################################################################
+            ind = np.random.choice(num_train, batch_size)
+            X_batch = X[ind,:]
+            y_batch = y[ind]
 
 
-#           #########################################################################
-#           #                       END OF YOUR CODE                                #
-#           #########################################################################
+          #########################################################################
+          #                       END OF YOUR CODE                                #
+          #########################################################################
 
-#           # evaluate loss and gradient
-#             loss, grad = self.loss(X_batch, y_batch, reg)
-#             loss_history.append(loss)
-
-#           # perform parameter update
-#           #########################################################################
-#           # TODO:                                                                 #
-#           # Update the weights using the gradient and the learning rate.          #
-#           # Hint: one line of code expected                                       #
-#           #########################################################################
-#             self.theta -= learning_rate*grad
-
-#           #########################################################################
-#           #                       END OF YOUR CODE                                #
-#           #########################################################################
-            #########################################################################
-            # TODO:                                                                 #
-            # Sample batch_size elements from the training data and their           #
-            # corresponding labels to use in this round of gradient descent.        #
-            # Store the data in X_batch and their corresponding labels in           #
-            # y_batch; after sampling X_batch should have shape (batch_size, dim)   #
-            # and y_batch should have shape (batch_size,)                           #
-            #                                                                       #
-            # Hint: Use np.random.choice to generate indices. Sampling with         #
-            # replacement is faster than sampling without replacement.              #
-            # About 3 lines of code expected                                        #
-            #########################################################################
-            idx = np.random.choice(num_train, batch_size, replace=True)
-            X_batch = X[idx]
-            y_batch = y[idx]
-            #########################################################################
-            #                       END OF YOUR CODE                                #
-            #########################################################################
-
-            # evaluate loss and gradient
+          # evaluate loss and gradient
             loss, grad = self.loss(X_batch, y_batch, reg)
             loss_history.append(loss)
 
-            # perform parameter update
-            #########################################################################
-            # TODO:                                                                 #
-            # Update the weights using the gradient and the learning rate.          #
-            # Hint: one line of code expected                                       #
-            #########################################################################
+          # perform parameter update
+          #########################################################################
+          # TODO:                                                                 #
+          # Update the weights using the gradient and the learning rate.          #
+          # Hint: one line of code expected                                       #
+          #########################################################################
             self.theta -= learning_rate*grad
 
-            #########################################################################
-            #                       END OF YOUR CODE                                #
-            #########################################################################
+          #########################################################################
+          #                       END OF YOUR CODE                                #
+          #########################################################################
+
             if verbose and it % 100 == 0:
                 print('iteration %d / %d: loss %f' % (it, num_iters, loss))
 
