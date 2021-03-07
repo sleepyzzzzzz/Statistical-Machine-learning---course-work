@@ -11,22 +11,22 @@ def get_CIFAR10_data(num_training=49000, num_validation=1000, num_test=10000):
   """
   # Load the raw CIFAR-10 data
 
-    cifar10_dir = 'datasets/cifar-10-batches-py'
-    X_train, y_train, X_test, y_test = load_CIFAR10(cifar10_dir)
+  cifar10_dir = 'datasets/cifar-10-batches-py'
+  X_train, y_train, X_test, y_test = load_CIFAR10(cifar10_dir)
   
   # subsample the data
 
-    X_train, y_train, X_val, y_val, X_test, y_test = subsample(num_training,num_validation,num_test,X_train,y_train,X_test,y_test)
+  X_train, y_train, X_val, y_val, X_test, y_test = subsample(num_training,num_validation,num_test,X_train,y_train,X_test,y_test)
 
   # visualize a subset of the training data
   
-    visualize_cifar10(X_train,y_train)
+  visualize_cifar10(X_train,y_train)
 
   # preprocess data
   
-    X_train, X_val, X_test = preprocess(X_train, X_val, X_test)
-  
-    return X_train, y_train, X_val, y_val, X_test, y_test
+  X_train, X_val, X_test = preprocess(X_train, X_val, X_test)
+
+  return X_train, y_train, X_val, y_val, X_test, y_test
 
 
 def load_CIFAR_batch(filename):
@@ -41,39 +41,39 @@ def load_CIFAR_batch(filename):
 
 def load_CIFAR10(cifar10_root):
   """ load all of cifar """
-    xs = []
-    ys = []
-    for b in range(1,6):
-        f = os.path.join(cifar10_root, 'data_batch_%d' % (b, ))
-        X, Y = load_CIFAR_batch(f)
-        xs.append(X)
-        ys.append(Y)    
-    Xtr = np.concatenate(xs)
-    Ytr = np.concatenate(ys)
-    del X, Y
-    Xte, Yte = load_CIFAR_batch(os.path.join(cifar10_root, 'test_batch'))
-    return Xtr, Ytr, Xte, Yte
+  xs = []
+  ys = []
+  for b in range(1,6):
+      f = os.path.join(cifar10_root, 'data_batch_%d' % (b, ))
+      X, Y = load_CIFAR_batch(f)
+      xs.append(X)
+      ys.append(Y)    
+  Xtr = np.concatenate(xs)
+  Ytr = np.concatenate(ys)
+  del X, Y
+  Xte, Yte = load_CIFAR_batch(os.path.join(cifar10_root, 'test_batch'))
+  return Xtr, Ytr, Xte, Yte
 
 
 # Visualize some examples from the dataset.
 # We show a few examples of training images from each class.
 
 def visualize_cifar10(X_train,y_train):
-    classes = ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
-    num_classes = len(classes)
-    samples_per_class = 7
-    for y, cls in enumerate(classes):
-        idxs = np.flatnonzero(y_train == y)
-        idxs = np.random.choice(idxs, samples_per_class, replace=False)
-        for i, idx in enumerate(idxs):
-            plt_idx = i * num_classes + y + 1
-            plt.subplot(samples_per_class, num_classes, plt_idx)
-            plt.imshow(X_train[idx].astype('uint8'))
-            plt.axis('off')
-            if i == 0:
-                plt.title(cls)
-    plt.show()
-    plt.close()
+  classes = ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+  num_classes = len(classes)
+  samples_per_class = 7
+  for y, cls in enumerate(classes):
+      idxs = np.flatnonzero(y_train == y)
+      idxs = np.random.choice(idxs, samples_per_class, replace=False)
+      for i, idx in enumerate(idxs):
+          plt_idx = i * num_classes + y + 1
+          plt.subplot(samples_per_class, num_classes, plt_idx)
+          plt.imshow(X_train[idx].astype('uint8'))
+          plt.axis('off')
+          if i == 0:
+              plt.title(cls)
+  plt.show()
+  plt.close()
 
 # subsampling  the data
 
