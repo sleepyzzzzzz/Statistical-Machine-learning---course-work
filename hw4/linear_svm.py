@@ -81,20 +81,6 @@ def svm_loss_naive(theta, X, y, C):
   # code above to compute the gradient.                                       #
   # 8-10 lines of code expected                                               #
   #############################################################################
-    # for i in range(m):
-    #     h = np.dot(X[i,:], theta)
-    #     hy = h[y[i]]
-    #     for j in range(K):
-    #         if j != y[i]:
-               
-    #             J += max(0.0,h[j] - hy + delta)
-    #         if (h[j] - hy + delta) > 0:
-    #             dtheta[:, j] += X[i, :]
-    #             dtheta[:, y[i]] -= X[i, :]
-
-    # J = J/m + C * np.sum(np.square(theta))/2
-    # dtheta = C * theta + dtheta/m 
-
     for i in range(m):
       h = np.dot(X[i, :], theta)
       h_t = y[i]
@@ -112,61 +98,6 @@ def svm_loss_naive(theta, X, y, C):
     # J = 1 / m * J + C / (2 * m) * np.sum(np.square(theta))
     # dtheta = 1 / m * dtheta + C / m * theta
 
-    # for i in range(m):
-    #     h = np.dot(X[i,:], theta)
-    #     hy = h[y[i]]
-    #     for j in range(K):
-    #         if j == y[i]:
-    #             continue
-    #         l = h[j] - hy + delta
-    #         if l > 0:
-    #             J += l
-    #             dtheta[:, j] += X[i, :]
-    #             dtheta[:, y[i]] -= X[i, :]
-
-    # J /= m
-    # dtheta /= m
-    # J += 0.5 * C * np.sum(theta * theta)
-    # dtheta += C * theta
-
-    # for mm in range(m):
-    #     p2 = np.dot(theta[:,y[mm]], X[mm,:])
-    #     for yy in range(K):
-    #         if yy != y[mm]:
-    #             m2 = np.dot(theta[:,yy], X[mm,:])-p2+delta
-    #             J += (max(0, m2))
-    #             if m2 > 0:
-    #                 dtheta[:,yy] += X[mm,:]
-    #                 dtheta[:,y[mm]] -= X[mm,:]
-    # J = np.sum(np.square(theta))/2/m*C + J/m
-    # dtheta = theta/m*C + dtheta/m
-
-
-
-    # num_classes = K
-    # num_train = m
-
-
-    # loss = 0.0
-    # for i in range(num_train):
-    #   scores = X[i].dot(theta)
-    #   correct_class_score = scores[y[i]]
-    #   diff_count = 0.0
-    #   for j in range(num_classes):
-    #     if j == y[i]:
-    #       continue
-    #     margin = scores[j] - correct_class_score + delta
-    #     if margin > 0:
-    #       diff_count += 1
-    #       dtheta[:, j] += X[i] # gradient update
-    #       loss += margin
-    #   # gradient update for correct row
-    #   dtheta[:, y[i]] += -diff_count * X[i]
-      
-    # loss /= num_train
-    # print(loss)
-    # dtheta /= num_train
-    # dtheta += C*dtheta
 
   #############################################################################
   # TODO:                                                                     #
