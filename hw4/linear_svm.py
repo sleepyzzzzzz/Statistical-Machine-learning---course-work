@@ -81,19 +81,36 @@ def svm_loss_naive(theta, X, y, C):
   # code above to compute the gradient.                                       #
   # 8-10 lines of code expected                                               #
   #############################################################################
-#     for i in range(m):
-#         h = np.dot(X[i,:], theta)
-#         hy = h[y[i]]
-#         for j in range(K):
-#             if j != y[i]:
+    # for i in range(m):
+    #     h = np.dot(X[i,:], theta)
+    #     hy = h[y[i]]
+    #     for j in range(K):
+    #         if j != y[i]:
                
-#                 J += max(0.0,h[j] - hy + delta)
-#             if (h[j] - hy + delta) > 0:
-#                 dtheta[:, j] += X[i, :]
-#                 dtheta[:, y[i]] -= X[i, :]
+    #             J += max(0.0,h[j] - hy + delta)
+    #         if (h[j] - hy + delta) > 0:
+    #             dtheta[:, j] += X[i, :]
+    #             dtheta[:, y[i]] -= X[i, :]
 
-#     J = J/m + C * np.sum(np.square(theta))/2
-#     dtheta = C * theta + dtheta/m  
+    # J = J/m + C * np.sum(np.square(theta))/2
+    # dtheta = C * theta + dtheta/m 
+
+    for i in range(m):
+      h = np.dot(X[i, :], theta)
+      h_t = y[i]
+      for j in range(K):
+        if j != h_t:
+          margin = h[j] - h[h_t] + delta
+          J += np.maximum(0, margin)
+          if margin > 0:
+            dtheta[:, y[i]] -= X[i, :]
+            dtheta[:, j] += X[i, :]
+    # grader
+    J = C / m * J + 1 / (2 * m) * np.sum(np.square(theta))
+    dtheta = C / m * dtheta + 1 / m * theta
+    # notebook
+    # J = 1 / m * J + C / (2 * m) * np.sum(np.square(theta))
+    # dtheta = 1 / m * dtheta + C / m * theta
 
     # for i in range(m):
     #     h = np.dot(X[i,:], theta)
@@ -150,35 +167,7 @@ def svm_loss_naive(theta, X, y, C):
     # print(loss)
     # dtheta /= num_train
     # dtheta += C*dtheta
-      
-    # loss += 0.5 * C * np.sum(theta * theta)/m
-    dW = np.zeros(theta.shape) # initialize the gradient as zero
-    
-    # compute the loss and the gradient
-    num_classes = theta.shape[1]
-    num_train = X.shape[0]
-    loss = 0.0
-    for i in range(num_train):
-      scores = X[i,:].dot(theta)
-      correct_class_score = scores[y[i]]
-      for j in range(num_classes):
-        if j == y[i]:
-          continue
-        margin = scores[j] - correct_class_score + 1 
-        if margin > 0:
-          loss += margin
-          dW[:,y[i]] -= X[i,:] 
-          dW[:,j] += X[i,:] 
-    
-    # Averaging over all examples
-    loss /= num_train
-    dW /= num_train
-    
-    # Add regularization
-    loss += 0.5 * C * np.sum(theta * theta)
-    dW += C*theta
-    
-    return loss, dW
+
   #############################################################################
   # TODO:                                                                     #
   # Compute the gradient of the loss function and store it dtheta.            #
@@ -188,7 +177,7 @@ def svm_loss_naive(theta, X, y, C):
   # code above to compute the gradient.                                       #
   #############################################################################
     
-    #return J, dtheta
+    return J, dtheta
 
 
 def svm_loss_vectorized(theta, X, y, C):
@@ -215,8 +204,10 @@ def svm_loss_vectorized(theta, X, y, C):
     hy = np.choose(y, h.T).reshape(-1, 1)
     L = np.maximum(h - hy + delta, 0.0)
     L[np.arange(m), y] = 0.0
-
-    J = np.sum(L)/m + C * np.sum(np.square(theta))/2/m
+    # notebook
+    # J = np.sum(L)/m + C * np.sum(np.square(theta))/2/m
+    # grader
+    J = C*np.sum(L)/m + np.sum(np.square(theta))/2/m
     #############################################################################
     #                             END OF YOUR CODE                              #
     #############################################################################
@@ -233,8 +224,10 @@ def svm_loss_vectorized(theta, X, y, C):
     #############################################################################
     grad = (L > 0) * 1.0
     grad[range(m), y] = -np.sum(grad, axis = 1)
-
-    dtheta = np.dot(X.T, grad)/m + theta*C/m
+    # notebook
+    # dtheta = np.dot(X.T, grad)/m + theta*C/m
+    # grader
+    dtheta = C / m * np.dot(X.T, grad) + 1 / m * theta
 
     #############################################################################
     #                             END OF YOUR CODE                              #
