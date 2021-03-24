@@ -114,6 +114,7 @@ for lr in learning_rates:
         results[(lr,rs)] = (train_acc)
         if train_acc > best_val:
             best_val = train_acc
+            best_softmax = soft
 for lr, reg in sorted(results):
     train_accuracy = results[(lr, reg)]
     print('lr %e reg %e train accuracy: %f' % (
