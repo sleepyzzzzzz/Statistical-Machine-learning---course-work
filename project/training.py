@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
-from logreg import RegLogisticRegressor
+from logistic_regressor import RegLogisticRegressor
 from softmax import softmax_loss_naive, softmax_loss_vectorized
 import linear_classifier
 
