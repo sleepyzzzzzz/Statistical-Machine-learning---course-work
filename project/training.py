@@ -110,15 +110,14 @@ for lr in learning_rates:
         soft = linear_classifier.Softmax()
         soft.train(X, y, learning_rate = lr, reg = rs, num_iters = 4000, batch_size = 400, verbose = False)
         train_acc = np.mean(soft.predict(X) == y)
-        val_acc = np.mean(soft.predict(X) == y)
-        print (lr, rs, ': ', train_acc, val_acc)
-        results[(lr,rs)] = (train_acc, val_acc)
-        if val_acc > best_val:
-            best_val = val_acc
+        print (lr, rs, ': ', train_acc)
+        results[(lr,rs)] = (train_acc)
+        if train_acc > best_val:
+            best_val = train_acc
 for lr, reg in sorted(results):
-    train_accuracy, val_accuracy = results[(lr, reg)]
-    print('lr %e reg %e train accuracy: %f val accuracy: %f' % (
-                lr, reg, train_accuracy, val_accuracy))
+    train_accuracy = results[(lr, reg)]
+    print('lr %e reg %e train accuracy: %f' % (
+                lr, reg, train_accuracy))
     
 print('best validation accuracy achieved during cross-validation: %f' % best_val)
 
