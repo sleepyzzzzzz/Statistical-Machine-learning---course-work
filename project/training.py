@@ -71,9 +71,16 @@ X /= 255
 X = X.reshape(1000*512*512, 4)
 y = y.reshape((1000*512*512, ))
 
-rand_idx1 = random.sample(range(0, X.shape[0]), 300)
 X = np.reshape(X, (-1, 4))
 y = np.reshape(y, (-1, )).astype(int)
+
+randnum = random.randint(0, 1000)
+random.seed(randnum)
+random.shuffle(X)
+random.seed(randnum)
+random.shuffle(y)
+X_mod = X[0:1000]
+y_mod = y[0:1000]
 
 # XX = np.vstack([np.ones((X.shape[0],)),X.T]).T
 
@@ -95,8 +102,8 @@ y = np.reshape(y, (-1, )).astype(int)
 
 #softmax
 print ('-------------------------------softmax---------------------------')
-theta = np.random.randn(X.shape[1], 7) * 0.0001
-loss, grad = softmax_loss_vectorized(theta, X, y, 0.0)
+theta = np.random.randn(X_mod.shape[1], 7) * 0.0001
+loss, grad = softmax_loss_vectorized(theta, X_mod, y_mod, 0.0)
 print ('loss: ', loss)
 results = {}
 best_val = -1
@@ -108,8 +115,8 @@ regularization_strengths = [5e4, 1e5, 5e5]
 for lr in learning_rates:
     for rs in regularization_strengths:
         soft = linear_classifier.Softmax()
-        soft.train(X, y, learning_rate = lr, reg = rs, num_iters = 4000, batch_size = 400, verbose = False)
-        train_acc = np.mean(soft.predict(X) == y)
+        soft.train(X_mod, y_mod, learning_rate = lr, reg = rs, num_iters = 4000, batch_size = 400, verbose = False)
+        train_acc = np.mean(soft.predict(X_mod) == y_mod)
         print (lr, rs, ': ', train_acc)
         results[(lr,rs)] = (train_acc)
         if train_acc > best_val:
@@ -122,27 +129,27 @@ for lr, reg in sorted(results):
     
 print('best validation accuracy achieved during cross-validation: %f' % best_val)
 
-y_test_pred = best_softmax.predict(X)
-test_accuracy = np.mean(y == y_test_pred)
+y_test_pred = best_softmax.predict(X_mod)
+test_accuracy = np.mean(y_mod == y_test_pred)
 print('softmax on raw pixels final test set accuracy: %f' % (test_accuracy, ))
 
 # compute confusion matrix
 from sklearn.metrics import confusion_matrix
-print(confusion_matrix(y,y_test_pred))
+print(confusion_matrix(y_mod,y_test_pred))
 
 
 # SVM
 print ('-------------------------------SVM---------------------------')
 from linear_svm import svm_loss_naive
 from linear_classifier1 import LinearSVM
-theta1 = np.random.randn(X.shape[1], 7) * 0.0001
-loss, grad = svm_loss_naive(theta1, X, y, 0.00001)
+theta1 = np.random.randn(X_mod.shape[1], 7) * 0.0001
+loss, grad = svm_loss_naive(theta1, X_mod, y_mod, 0.00001)
 print('loss: %f' % (loss, ))
 print('grad: %s', grad)
 
 svm = LinearSVM()
-y_train_pred = svm.predict(X, grad)
-print('training accuracy: %f' % (np.mean(y == y_train_pred), ))
+y_train_pred = svm.predict(X_mod, grad)
+print('training accuracy: %f' % (np.mean(y_mod == y_train_pred), ))
 learning_rates = [1e-8, 5e-8, 1e-7, 5e-7, 1e-6]
 regularization_strengths = [1e4, 5e4, 1e5, 5e5]
 
@@ -156,9 +163,9 @@ for lr in learning_rates:
     svm = LinearSVM()
     for C in regularization_strengths:
         
-        svm.train(X, y, learning_rate=lr, reg=C, num_iters=15000, verbose=False)
-        train_pred = svm.predict(X, theta1)
-        acc_train = np.mean(y == train_pred)
+        svm.train(X_mod, y_mod, learning_rate=lr, reg=C, num_iters=15000, verbose=False)
+        train_pred = svm.predict(X_mod, theta1)
+        acc_train = np.mean(y_mod == train_pred)
         results[(lr, C)] = acc_train
         if (acc_train > best_val):
             best_lr = lr
