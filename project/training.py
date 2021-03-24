@@ -32,9 +32,9 @@ files_l6 = os.listdir(l6_path)
 X = []
 y = []
 
-rand_idx = random.sample(range(0, 10), 3)
+rand_idx = random.sample(range(0, len(files_rgb)), 1000)
 
-for i in range(10):
+for i in range(len(files_rgb)):
     print (i)
     img_rgb = mpimg.imread(os.path.join(rgb_path, files_rgb[i]))
     img_nir = mpimg.imread(os.path.join(nir_path, files_nir[i]))
@@ -68,8 +68,8 @@ X = np.array(X)
 y = np.array(y)
 X /= 255
 
-X = X.reshape(3*512*512, 4)
-y = y.reshape((3*512*512, ))
+X = X.reshape(1000*512*512, 4)
+y = y.reshape((1000*512*512, ))
 
 rand_idx1 = random.sample(range(0, X.shape[0]), 300)
 X = np.reshape(X, (-1, 4))
