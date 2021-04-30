@@ -47,7 +47,7 @@ class ASPP(nn.Module):
         self.conv1 = nn.Conv2d(1280, 256, 1, bias=False)
         self.bn1 = BatchNorm(256)
         self.relu = nn.ReLU()
-        self.dropout = nn.Dropout(0.5)
+        self.dropout = nn.Dropout(0.3)
         
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -68,8 +68,9 @@ class ASPP(nn.Module):
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
+        x = self.dropout(x)
 
-        return self.dropout(x)
+        return x
 
 def build_aspp(output_stride, BatchNorm):
     return ASPP(output_stride, BatchNorm)
